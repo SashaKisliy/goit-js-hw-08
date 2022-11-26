@@ -1,7 +1,8 @@
 import throttle from "lodash.throttle";
 
 const FEEDBACK = "feedback-form-state";
-let formData = {};
+// let formData = {};
+
 
 const input = document.querySelector('input');
 const textArea = document.querySelector('textarea')
@@ -9,15 +10,24 @@ const form = document.querySelector('.feedback-form');
 
 populuteForm();
 
-form.addEventListener('input', throttle(inputOnForm, 500));
+form.addEventListener('input', inputOnForm);
 form.addEventListener('submit', submitForm)
 
 
 function inputOnForm(e) {
-    
-    formData[e.target.name] = e.target.value;
+    const {
+        email,
+        message
+    } = e.currentTarget.elements
 
-    const dataString = JSON.stringify(formData);
+    const dataForm = {
+        email: email.value,
+        message: message.value
+    }
+
+    // formData[e.target.name] = e.target.value;
+
+    const dataString = JSON.stringify(dataForm);
 
 
     localStorage.setItem(FEEDBACK, dataString);
@@ -25,6 +35,9 @@ function inputOnForm(e) {
 }
 
 function submitForm(e) {
+        // if (input.value === '' || textArea.value === '') {
+        //     return prompt('Не все поля заполнены')
+        // }
     e.preventDefault();
     e.target.reset();
     localStorage.removeItem(FEEDBACK);
